@@ -1,0 +1,47 @@
+<div class="jumbtron">
+  <h1 class="display-4 text-center">Users</h1>
+</div>
+
+<div class="col-md-12">
+  <button type="button" class="btn btn-success" >Create User</button>
+  <hr/>
+
+  <div class="form-group">
+      <label for="Search">Search</label>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <div class="input-group-text bg-white">
+              <i class="fas fa-search"></i>
+          </div>
+        </div>
+        <input type="text" />
+      </div>
+    </div>
+
+  <table class="table table-condensed table-bordered table-striped table-hover">
+      <thead>
+          <tr>
+          <th>UserName</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Status</th>
+          <th>Created Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{user.userName}}</td>
+          <td>{{user.firstName}}</td>
+          <td>{{user.lastName}}</td>
+          <td>{{user.userStatus}}</td>
+          <td>{{user.createdDate | date: 'mediumDate'}}</td>
+          <td class="action-button-column">
+            <a title="Edit" routerLink="/user/{{user.UserId}}"><i class="fas fa-edit"></i> </a>
+            <a title="Delete" style="margin-left: 12px;"><i class="fas fa-trash-alt"></i> </a>
+        </td>
+        </tr>
+      </tbody>
+
+  </table>
+</div>

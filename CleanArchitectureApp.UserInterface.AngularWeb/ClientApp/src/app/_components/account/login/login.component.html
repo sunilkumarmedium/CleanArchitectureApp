@@ -1,0 +1,36 @@
+
+<div class="card shadow p-3 mb-5 bg-white rounded card-top">
+
+  <h4 class="card-header">Login</h4>
+  <div class="card-body">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && formControls.username.errors }" />
+          <div *ngIf="submitted && formControls.username.errors" class="invalid-feedback">
+              <div *ngIf="formControls.username.errors.required">Username is required</div>
+              <div *ngIf="formControls.username.errors.serverError">{{ formControls.username.errors.serverError}}</div>
+          </div>
+      </div>
+      <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && formControls.password.errors }" />
+          <div *ngIf="submitted && formControls.password.errors" class="invalid-feedback">
+              <div *ngIf="formControls.password.errors.required">Password is required</div>
+              <div *ngIf="formControls.password.errors.serverError">{{ formControls.password.errors.serverError}}</div>
+          </div>
+      </div>
+      <div class="form-row">
+      <div class="form-group col">
+          <button class="btn btn-primary">
+              Login
+          </button>
+        </div>
+        <div class="form-group col text-right">
+          <a routerLink="/account/forgotpassword" class="btn btn-link pr-0">Forgot Password?</a>
+        </div>
+      </div>
+
+  </form>
+  </div>
+</div>

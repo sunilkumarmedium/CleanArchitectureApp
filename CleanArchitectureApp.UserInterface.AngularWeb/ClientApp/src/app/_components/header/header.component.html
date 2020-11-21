@@ -1,0 +1,59 @@
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top bd-navbar">
+    <a class="navbar-brand" href=""> Clean Architecture Application </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <ul class="navbar-nav" *ngIf="isAuthenticated | async">
+      <li class="nav-item dropdown">
+        <div ngbDropdown class="d-inline-block">
+          <a
+            href="javascript:void(0);"
+            class="nav-link"
+            id="dropdownBasic3"
+            ngbDropdownToggle
+            >System</a>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic3">
+            <a routerLink="/users" class="dropdown-item">Manage Users</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div
+      class="navbar-nav ml-auto"
+      id="navbarNav"
+      *ngIf="isAuthenticated | async">
+
+      <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+        <li class="nav-item dropdown">
+          <div ngbDropdown class="d-inline-block">
+            <a
+              href="javascript:void(0);"
+              class="nav-link"
+              id="dropdownProfile"
+              ngbDropdownToggle
+              >Profile</a>
+            <div ngbDropdownMenu aria-labelledby="dropdownProfile">
+              <a
+                routerLink="/users"
+                class="dropdown-item"
+                (click)="logout()"
+                title="Logout"
+                >Logout</a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+

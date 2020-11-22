@@ -27,15 +27,25 @@ Clean Architecture Application Design from Scratch using Dotnet Core 3.1 WebApi 
 2. Execute the sql scripts available in the folder /sql/CleanArchitectureDB.sql
 3. Change the database connectionstring in appsettings.json 
    - Path : CleanArchitectureApp.WebApi/appsettings.Development.json
-4. open the CleanArchitectureApp.sln
+4. cd to folder CleanArchitectureApp\CleanArchitectureApp.UserInterface.AngularWeb\ClientApp
+   - npm install
+5. open the CleanArchitectureApp.sln
    - Visual Studio 2019 IDE
       - opening the solution will restore the nuget and npm packages build the solution
       - Multiple Projects Startup CleanArchitectureApp.WebApi and CleanArchitectureApp.UserInterface.AngularWeb
    - Visual Studio Code
      - Open the folder CleanArchitectureApp
+	 ![alt text](Screenshots/Open-VisualStudio-Code.png "Open-VisualStudio-Code")
      - Build the Solution
      - Run the Projects CleanArchitectureApp.WebApi and CleanArchitectureApp.UserInterface.AngularWeb
- 5. Test User to Login
+	 ![alt text](Screenshots/Run-VisualStudio-Code.png "Run-VisualStudio-Code")
+ 6. Application URL's
+	- Webapi http://localhost:5001
+	![alt text](Screenshots/Swagger-Webapi.png "Swagger-Webapi")
+	- AngularWeb http://localhost:5003
+	![alt text](Screenshots/Login.png "Login")
+	![alt text](Screenshots/Homepage.png "Homepage")
+ 7. Test User to Login
     - Username: system 
     - Password: admin@123
      

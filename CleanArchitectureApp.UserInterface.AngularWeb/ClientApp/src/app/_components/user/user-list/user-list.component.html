@@ -3,7 +3,7 @@
 </div>
 
 <div class="col-md-12">
-  <button type="button" class="btn btn-success" >Create User</button>
+  <a type="button" class="btn btn-success" [routerLink]="['/manageuser/ ']">Create User</a>
   <hr/>
 
   <div class="form-group">
@@ -37,8 +37,8 @@
           <td>{{user.userStatus}}</td>
           <td>{{user.createdDate | date: 'mediumDate'}}</td>
           <td class="action-button-column">
-            <a title="Edit" routerLink="/user/{{user.UserId}}"><i class="fas fa-edit"></i> </a>
-            <a title="Delete" style="margin-left: 12px;"><i class="fas fa-trash-alt"></i> </a>
+
+            <a title="Edit" routerLink="/manageuser/{{user.userId}}"><i class="fas fa-edit"></i> </a>
         </td>
         </tr>
       </tbody>

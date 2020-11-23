@@ -20,11 +20,50 @@ export class UserService {
      return this.http.post<ApiResponse>(`${environment.baseWebApiUrl}/v1/User/GetAllUsers`, {}).pipe(
       map(
         (response: ApiResponse) => {
-
           return this.userlist = response.data;
         }
       )
     );
 
   }
+
+  public getUserById(id: string): Observable<User>
+  {
+
+     return this.http.post<ApiResponse>(`${environment.baseWebApiUrl}/v1/User/GetUserById`, {userId: id}).pipe(
+      map(
+        (response: ApiResponse) => {
+          return response.data;
+        }
+      )
+    );
+
+  }
+
+  public createUser(params: any): Observable<User>
+  {
+
+     return this.http.post<ApiResponse>(`${environment.baseWebApiUrl}/v1/User/CreateUser`, params).pipe(
+      map(
+        (response: ApiResponse) => {
+          return response.data;
+        }
+      )
+    );
+
+  }
+
+  public updateUser(params: any): Observable<User>
+  {
+
+     return this.http.put<ApiResponse>(`${environment.baseWebApiUrl}/v1/User/UpdateUserById`, params).pipe(
+      map(
+        (response: ApiResponse) => {
+          return response.data;
+        }
+      )
+    );
+
+  }
+
 }

@@ -45,10 +45,11 @@ namespace CleanArchitectureApp.Infrastructure.Persistence.Repositories
             return (await Session.Query<T>().Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync().ConfigureAwait(false)).AsQueryable();
         }
 
-        public virtual async Task UpdateAsync(T entity)
+        public virtual async Task<T> UpdateAsync(T entity)
         {
             await Session.SaveOrUpdateAsync(entity).ConfigureAwait(false);
             await Session.FlushAsync().ConfigureAwait(false);
+            return entity;
         }
     }
 }

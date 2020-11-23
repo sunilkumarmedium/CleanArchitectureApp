@@ -35,11 +35,15 @@ namespace CleanArchitectureApp.Application.Features.Users.Commands
 
         public async Task<Response<Guid>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = _mapper.Map<User>(request);
+            var user = (await _userRepository.FindByCondition(x => x.UserId == request.UserId).ConfigureAwait(false)).AsQueryable().FirstOrDefault();
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.UserEmail = request.UserEmail;
+            user.UpdatedBy = request.UpdatedBy;
             user.UpdatedDate = DateTime.UtcNow;
             user.UserStatuses = (await _userStatusRepository.FindByCondition(x => x.UserStatusId == request.UserStatus).ConfigureAwait(false)).AsQueryable().FirstOrDefault();
 
-            var userObject = await _userRepository.AddAsync(user).ConfigureAwait(false);
+            var userObject = await _userRepository.UpdateAsync(user).ConfigureAwait(false);
             return new Response<Guid>(userObject.UserId);
         }
     }

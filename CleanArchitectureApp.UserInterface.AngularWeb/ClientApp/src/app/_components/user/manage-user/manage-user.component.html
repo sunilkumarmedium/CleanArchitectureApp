@@ -1,0 +1,80 @@
+<h1 *ngIf="isAddMode">Create User</h1>
+<h1 *ngIf="!isAddMode">Edit User</h1>
+<div class="card-body">
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="form-group row">
+        <label for="userName" class="col-sm-1 col-form-label">Username</label>
+        <div class="col-sm-11">
+        <input type="text" formControlName="userName" class="form-control" [ngClass]="{ 'is-invalid': submitted && formControls.userName.errors }" />
+        <div *ngIf="submitted && formControls.userName.errors" class="invalid-feedback">
+            <div *ngIf="formControls.userName.errors.required">Username is required</div>
+            <div *ngIf="formControls.userName.errors.serverError">{{ formControls.userName.errors.serverError}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row" *ngIf="isAddMode">
+      <label for="password" class="col-sm-1 col-form-label">Password</label>
+      <div class="col-sm-11">
+      <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && formControls.password.errors }" />
+      <div *ngIf="submitted && formControls.password.errors" class="invalid-feedback">
+          <div *ngIf="formControls.password.errors.required">Password is required</div>
+          <div *ngIf="formControls.password.errors.serverError">{{ formControls.password.errors.serverError}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row" *ngIf="isAddMode">
+    <label for="confirmPassword" class="col-sm-1 col-form-label">Confirm Password</label>
+    <div class="col-sm-11">
+    <input type="password" formControlName="confirmPassword" class="form-control" [ngClass]="{ 'is-invalid': submitted && formControls.confirmPassword.errors }" />
+    <div *ngIf="submitted && formControls.confirmPassword.errors" class="invalid-feedback">
+        <div *ngIf="formControls.confirmPassword.errors.required">Confirm Password is required</div>
+        <div *ngIf="formControls.confirmPassword.errors.serverError">{{ formControls.confirmPassword.errors.serverError}}</div>
+    </div>
+  </div>
+</div>
+
+<div class="form-group row">
+  <label for="firstName" class="col-sm-1 col-form-label">First name</label>
+  <div class="col-sm-11">
+  <input type="text" formControlName="firstName" class="form-control" [ngClass]="{ 'is-invalid': submitted && formControls.firstName.errors }" />
+  <div *ngIf="submitted && formControls.firstName.errors" class="invalid-feedback">
+      <div *ngIf="formControls.firstName.errors.required">First Name is required</div>
+      <div *ngIf="formControls.firstName.errors.serverError">{{ formControls.firstName.errors.serverError}}</div>
+  </div>
+</div>
+</div>
+
+<div class="form-group row">
+  <label for="lastName" class="col-sm-1 col-form-label">Last Name</label>
+  <div class="col-sm-11">
+  <input type="text" formControlName="lastName" class="form-control" [ngClass]="{ 'is-invalid': submitted && formControls.lastName.errors }" />
+  <div *ngIf="submitted && formControls.lastName.errors" class="invalid-feedback">
+      <div *ngIf="formControls.lastName.errors.required">Confirm Password is required</div>
+      <div *ngIf="formControls.lastName.errors.serverError">{{ formControls.lastName.errors.serverError}}</div>
+  </div>
+</div>
+</div>
+
+<div class="form-group row">
+  <label for="userEmail" class="col-sm-1 col-form-label">Email</label>
+  <div class="col-sm-11">
+  <input type="text" formControlName="userEmail" class="form-control" [ngClass]="{ 'is-invalid': submitted && formControls.userEmail.errors }" />
+  <div *ngIf="submitted && formControls.userEmail.errors" class="invalid-feedback">
+      <div *ngIf="formControls.userEmail.errors.required">Confirm Password is required</div>
+      <div *ngIf="formControls.userEmail.errors.serverError">{{ formControls.userEmail.errors.serverError}}</div>
+  </div>
+</div>
+</div>
+<div class="form-row">
+
+      <button class="btn btn-primary">
+          Submit
+      </button>
+      <a routerLink="/users" class="btn btn-link">Cancel</a>
+    </div>
+
+</form>
+</div>

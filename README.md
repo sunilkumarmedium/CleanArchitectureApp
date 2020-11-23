@@ -35,7 +35,7 @@ Clean Architecture Application Design from Scratch using Dotnet Core 3.1 WebApi 
       - Multiple Projects Startup CleanArchitectureApp.WebApi and CleanArchitectureApp.UserInterface.AngularWeb
    - Visual Studio Code
      - Open the folder CleanArchitectureApp
-	 ![alt text](Screenshots/Open-VisualStudio-Code.png "Open-VisualStudio-Code")
+      ![alt text](Screenshots/Open-VisualStudio-Code.png "Open-VisualStudio-Code")
      - Build the Solution
      - Run the Projects CleanArchitectureApp.WebApi and CleanArchitectureApp.UserInterface.AngularWeb
 	 ![alt text](Screenshots/Run-VisualStudio-Code.png "Run-VisualStudio-Code")

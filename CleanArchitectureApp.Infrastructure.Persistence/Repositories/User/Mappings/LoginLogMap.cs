@@ -8,7 +8,6 @@ namespace CleanArchitectureApp.Infrastructure.Persistence.Repositories
     {
         public LoginLogMap()
         {
-            Schema("dbo");
             Table("LoginLogs");
             Lazy(true);
             Id(x => x.LoginLogId, map => map.Generator(Generators.Guid));

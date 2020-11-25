@@ -19,14 +19,28 @@ namespace CleanArchitectureApp.Infrastructure.Persistence
             HbmMapping domainMapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
 
             var NHConfiguration = new Configuration();
-            NHConfiguration.DataBaseIntegration(c =>
+            if (configuration.GetValue<string>("DBProvider").ToLower().Equals("mssql"))
             {
-                c.Dialect<MsSql2008Dialect>();
-                c.ConnectionString = configuration.GetConnectionString("DefaultConnection");
-                c.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
-                c.LogFormattedSql = true;
-                c.LogSqlInConsole = true;
-            });
+                NHConfiguration.DataBaseIntegration(c =>
+                {
+                    c.Dialect<MsSql2008Dialect>();
+                    c.ConnectionString = configuration.GetConnectionString("MSSQLConnection");
+                    c.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
+                    c.LogFormattedSql = true;
+                    c.LogSqlInConsole = true;
+                });
+            }
+            else if (configuration.GetValue<string>("DBProvider").ToLower().Equals("postgres"))
+            {
+                NHConfiguration.DataBaseIntegration(c =>
+                {
+                    c.Dialect<PostgreSQL82Dialect>();
+                    c.ConnectionString = configuration.GetConnectionString("PostgresConnection");
+                    c.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
+                    c.LogFormattedSql = true;
+                    c.LogSqlInConsole = true;
+                });
+            }
             NHConfiguration.AddMapping(domainMapping);
 
             var sessionFactory = NHConfiguration.BuildSessionFactory();

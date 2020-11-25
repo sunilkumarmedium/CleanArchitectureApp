@@ -8,7 +8,6 @@ namespace CleanArchitectureApp.Infrastructure.Persistence.Repositories
     {
         public UserStatusesMap()
         {
-            Schema("dbo");
             Table("UserStatuses");
             Lazy(true);
             Id(x => x.UserStatusId, map => map.Generator(Generators.Identity));

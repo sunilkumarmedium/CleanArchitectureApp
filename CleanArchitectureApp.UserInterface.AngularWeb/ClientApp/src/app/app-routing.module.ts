@@ -8,6 +8,7 @@ import { AuthGuard } from './_shared/auth.guard';
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard]},
   { path: 'users', component: UserListComponent, canActivate: [AuthGuard]},
+  { path: 'manageuser', component: ManageUserComponent , canActivate: [AuthGuard]},
   { path: 'manageuser/:id', component: ManageUserComponent , canActivate: [AuthGuard]},
   { path: 'account', loadChildren: () => import('./_components/account/account.module').then(m => m.AccountModule) },
   { path: '**', redirectTo: '' }

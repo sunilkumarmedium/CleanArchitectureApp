@@ -9,7 +9,6 @@ namespace CleanArchitectureApp.Infrastructure.Persistence.Repositories
     {
         public UserTokenMap()
         {
-            Schema("dbo");
             Table("UserTokens");
             Lazy(true);
             Id(x => x.UserTokenId, map => map.Generator(Generators.Guid));

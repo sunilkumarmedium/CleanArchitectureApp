@@ -9,7 +9,6 @@ namespace CleanArchitectureApp.Infrastructure.Persistence.Repositories
     {
         public UserMap()
         {
-            Schema("dbo");
             Table("Users");
             Lazy(true);
             Id(x => x.UserId, map =>

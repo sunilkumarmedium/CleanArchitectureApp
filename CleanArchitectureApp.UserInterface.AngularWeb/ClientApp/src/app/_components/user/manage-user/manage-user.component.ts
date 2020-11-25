@@ -28,7 +28,7 @@ export class ManageUserComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.id = this.route.snapshot.params.id.toString().trim();
+    this.id = this.route.snapshot.params.id;
     this.isAddMode = !this.id;
     this.loginUser = this.authenticationService.userValue?.id;
     this.form = this.formBuilder.group({

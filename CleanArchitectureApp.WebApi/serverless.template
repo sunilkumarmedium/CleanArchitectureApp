@@ -46,7 +46,7 @@
         "Timeout": 30,
         "Role": null,
         "Policies": [
-          "AWSLambdaFullAccess"
+          "AWSLambdaFullAccess", "AmazonSSMFullAccess","AWSLambdaVPCAccessExecutionRole"
         ],
         "Environment": {
           "Variables": {

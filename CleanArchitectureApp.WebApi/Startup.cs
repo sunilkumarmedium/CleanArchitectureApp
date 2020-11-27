@@ -7,7 +7,6 @@ namespace CleanArchitectureApp.WebApi
     using CleanArchitectureApp.WebApi.Middlewares;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Mvc.ViewFeatures;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;

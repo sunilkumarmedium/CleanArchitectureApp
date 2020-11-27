@@ -1,4 +1,7 @@
-﻿using CleanArchitectureApp.Application.Interfaces.Repositories;
+﻿using System.Threading.Tasks;
+using Amazon.SimpleSystemsManagement;
+using Amazon.SimpleSystemsManagement.Model;
+using CleanArchitectureApp.Application.Interfaces.Repositories;
 using CleanArchitectureApp.Infrastructure.Persistence.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,14 +20,32 @@ namespace CleanArchitectureApp.Infrastructure.Persistence
             mapper.AddMappings(typeof(UserMap).Assembly.ExportedTypes);
 
             HbmMapping domainMapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
-
+            var connectionString = string.Empty;
             var NHConfiguration = new Configuration();
+
             if (configuration.GetValue<string>("DBProvider").ToLower().Equals("mssql"))
             {
+                connectionString = configuration.GetConnectionString("MSSQLConnection");
+
+                if (configuration.GetValue<bool>("IsCloudDeployment"))
+                {
+                    var request = new GetParameterRequest()
+                    {
+                        Name = configuration.GetConnectionString("CloudSSMConnectionString")
+                    };
+
+                    using (var client = new AmazonSimpleSystemsManagementClient(Amazon.RegionEndpoint.GetBySystemName(configuration.GetValue<string>("Region"))))
+                    {
+                        var response =  client.GetParameterAsync(request).GetAwaiter().GetResult();;
+                        connectionString = response.Parameter.Value;
+                    }
+
+                }
+
                 NHConfiguration.DataBaseIntegration(c =>
                 {
                     c.Dialect<MsSql2008Dialect>();
-                    c.ConnectionString = configuration.GetConnectionString("MSSQLConnection");
+                    c.ConnectionString = connectionString;
                     c.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
                     c.LogFormattedSql = true;
                     c.LogSqlInConsole = true;
@@ -32,10 +53,26 @@ namespace CleanArchitectureApp.Infrastructure.Persistence
             }
             else if (configuration.GetValue<string>("DBProvider").ToLower().Equals("postgres"))
             {
+                connectionString = configuration.GetConnectionString("PostgresConnection");
+
+                if (configuration.GetValue<bool>("IsCloudDeployment"))
+                {
+                     var request = new GetParameterRequest()
+                    {
+                        Name = configuration.GetConnectionString("CloudSSMConnectionString")
+                    };
+
+                    using (var client = new AmazonSimpleSystemsManagementClient(Amazon.RegionEndpoint.GetBySystemName(configuration.GetValue<string>("Region"))))
+                    {
+                        var response = client.GetParameterAsync(request).GetAwaiter().GetResult();
+                        connectionString = response.Parameter.Value;
+                    }
+                }
+
                 NHConfiguration.DataBaseIntegration(c =>
                 {
                     c.Dialect<PostgreSQL82Dialect>();
-                    c.ConnectionString = configuration.GetConnectionString("PostgresConnection");
+                    c.ConnectionString = connectionString;
                     c.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
                     c.LogFormattedSql = true;
                     c.LogSqlInConsole = true;

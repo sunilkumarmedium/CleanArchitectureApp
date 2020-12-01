@@ -72,7 +72,9 @@ AWS Lambda Deployment, AWS RDS Instance Creation and Managing the database conne
 Read the below articles to get some understanding on the AWS RDS , Lambda and Systems Manager.
 
 https://sunil-kumar-60226.medium.com/postgresql-database-instance-creation-and-configuration-in-aws-rds-9ac324cee7fc
+
 https://sunil-kumar-60226.medium.com/aws-systems-manager-parameter-store-for-managing-configuration-and-retrieve-at-runtime-using-c-e5593752705c
+
 https://sunil-kumar-60226.medium.com/build-a-serverless-dotnet-core-web-api-with-aws-lambda-and-api-gateway-4c670edd8747
 
 

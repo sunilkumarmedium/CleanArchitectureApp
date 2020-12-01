@@ -14,7 +14,12 @@ Clean Architecture Application Design from Scratch using Dotnet Core 3.1 WebApi 
 - [Fluent Validation](https://fluentvalidation.net/)
 - WebAPI Global Exception Middleware
 - Login, Logout and Forgot Password using JWT tokens
-- Microsoft Sql Server and Postgresql supported.
+- Microsoft Sql Server and Postgresql supported
+- AWS Postgres RDS
+- AWS Lambda
+- AWS Systems Manager
+- AWS Simple Storage Service (S3)
+
 
 ## Pre-requisites
 1. [.Net core 3.1 SDK](https://www.microsoft.com/net/core#windows)
@@ -59,6 +64,29 @@ Clean Architecture Application Design from Scratch using Dotnet Core 3.1 WebApi 
     - `Username: system`
     - `Password: admin@123`
 
+## Cloud Deployment
 
+
+AWS Lambda Deployment, AWS RDS Instance Creation and Managing the database connectionstring using AWS Systems Manager
+
+Read the below articles to get some understanding on the AWS RDS , Lambda and Systems Manager.
+
+https://sunil-kumar-60226.medium.com/postgresql-database-instance-creation-and-configuration-in-aws-rds-9ac324cee7fc
+https://sunil-kumar-60226.medium.com/aws-systems-manager-parameter-store-for-managing-configuration-and-retrieve-at-runtime-using-c-e5593752705c
+https://sunil-kumar-60226.medium.com/build-a-serverless-dotnet-core-web-api-with-aws-lambda-and-api-gateway-4c670edd8747
+
+
+
+Change the settings in appsettings.json  `IsCloudDeployment` `Region` `CloudSSMConnectionString` 
+```
+"IsCloudDeployment": "true",
+  "Region": "ap-south-1",
+  "DBProvider": "POSTGRES" ,
+  "ConnectionStrings": {
+    "MSSQLConnection": "Data Source=DESKTOP-SUNILBO;Initial Catalog=CleanArchitectureDB;User ID=sa;Password=admin@123;MultipleActiveResultSets=True",
+    "PostgresConnection": "Server=127.0.0.1;Port=5432;Database=CleanArchitectureDB;User Id=postgres;Password=admin@123;Timeout=30;TimeZone=UTC",
+    "CloudSSMConnectionString": "/CleanArchitectureAppWebApi/postgresconnection"
+  },
+```
 
 

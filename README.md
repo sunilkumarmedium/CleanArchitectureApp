@@ -4,7 +4,7 @@ Clean Architecture Application Design from Scratch using Dotnet Core 3.1 WebApi 
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
 ## Technologies
-- [ASP.NET Core 3.1](https://dotnet.microsoft.com/)
+- [ASP.NET Core 5](https://dotnet.microsoft.com/)
 - [NHibernate](https://nhibernate.info/)
 - [Angular 11](https://angular.io/)
 - [Angular CLI 11](https://cli.angular.io/)
@@ -22,7 +22,7 @@ Clean Architecture Application Design from Scratch using Dotnet Core 3.1 WebApi 
 
 
 ## Pre-requisites
-1. [.Net core 3.1 SDK](https://www.microsoft.com/net/core#windows)
+1. [.Net core 5 SDK](https://www.microsoft.com/net/core#windows)
 2. [Visual studio 2019](https://www.visualstudio.com/) OR [VSCode](https://code.visualstudio.com/) with [C#](https://marketplace.visualstudio.com/items?itemName=ms-vscode.csharp) extension
 3. [NodeJs](https://nodejs.org/en/) (Latest LTS)
 4. [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-2017) (Optional: If MS SQL server required instead of Sqlite during development)

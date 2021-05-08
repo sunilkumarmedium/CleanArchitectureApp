@@ -9,7 +9,7 @@
            "type": "coreclr",
            "request": "launch",
            "preLaunchTask": "build",
-           "program": "${workspaceFolder}/CleanArchitectureApp.WebApi/bin/Debug/netcoreapp3.1/CleanArchitectureApp.WebApi.dll",
+           "program": "${workspaceFolder}/CleanArchitectureApp.WebApi/bin/Debug/net5.0/CleanArchitectureApp.WebApi.dll",
            "args": [],
            "cwd": "${workspaceFolder}",
            "stopAtEntry": false,
@@ -31,7 +31,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CleanArchitectureApp.UserInterface.AngularWeb/bin/Debug/netcoreapp3.1/CleanArchitectureApp.UserInterface.AngularWeb.dll",
+            "program": "${workspaceFolder}/CleanArchitectureApp.UserInterface.AngularWeb/bin/Debug/net5.0/CleanArchitectureApp.UserInterface.AngularWeb.dll",
             "args": [],
             "cwd": "${workspaceFolder}/CleanArchitectureApp.UserInterface.AngularWeb",
             "stopAtEntry": false,

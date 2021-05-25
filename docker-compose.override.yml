@@ -1,0 +1,12 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: '3.4'
+
+services:
+  cleanarchitectureappwebapi:
+    container_name: cleanarchitectureappwebapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:MSSQLConnection=Data Source=172.24.128.1;Initial Catalog=CleanArchitectureDB;User ID=sa;Password=admin@123;MultipleActiveResultSets=True"
+    ports:
+      - 5001:5001

@@ -54,6 +54,62 @@
                 "kind": "test",
                 "isDefault": true
             }
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build: debug",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "cleanarchitectureapp:dev",
+                "target": "base",
+                "dockerfile": "${workspaceFolder}/CleanArchitectureApp.WebApi/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/CleanArchitectureApp.WebApi/CleanArchitectureApp.WebApi.csproj"
+            }
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build: release",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "cleanarchitectureapp:latest",
+                "dockerfile": "${workspaceFolder}/CleanArchitectureApp.WebApi/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/CleanArchitectureApp.WebApi/CleanArchitectureApp.WebApi.csproj"
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run: debug",
+            "dependsOn": [
+                "docker-build: debug"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/CleanArchitectureApp.WebApi/CleanArchitectureApp.WebApi.csproj",
+                "enableDebugging": true
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run: release",
+            "dependsOn": [
+                "docker-build: release"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/CleanArchitectureApp.WebApi/CleanArchitectureApp.WebApi.csproj"
+            }
         }
     ]
 }

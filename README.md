@@ -19,7 +19,7 @@ Clean Architecture Application Design from Scratch using Dotnet Core 5 WebApi an
 - AWS Lambda
 - AWS Systems Manager
 - AWS Simple Storage Service (S3)
-
+- [Docker](https://docs.docker.com/docker-for-windows/install/) 
 
 ## Pre-requisites
 1. [.Net core 5 SDK](https://www.microsoft.com/net/core#windows)
@@ -91,4 +91,23 @@ Change the settings in appsettings.json  `IsCloudDeployment` `Region` `CloudSSMC
   },
 ```
 
+## Docker Container Deployment
+### Installing
+Follow these steps to get your development environment: (Before Run Start the Docker Desktop)
+1. Clone the repository
+2. Once Docker for Windows is installed, go to the **Settings > Advanced option**, from the Docker icon in the system tray, to configure the minimum amount of memory and CPU like so:
+* **Memory: 4 GB**
+* CPU: 2
+3. At the root directory which include **docker-compose.yml** files, run below command:
+```csharp
+docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
+```
+![alt text](Screenshots/Docker_Compose.png "Docker_Compose")
+![alt text](Screenshots/Docker_pullImages.png "Docker_pullImages")
+4. Launch Url's
 
+* **CleanArchitectureApp API -> http://localhost:5001/swagger/index.html**
+* **Portainer -> http://localhost:9000**   -- admin/admin@123
+![alt text](Screenshots/portainer_home.png "portainer_home")
+![alt text](Screenshots/portainer_Select_docker.png "portainer_Select_docker")
+![alt text](Screenshots/portainer_dashboard.png "portainer_dashboard")

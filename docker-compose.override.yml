@@ -2,11 +2,52 @@
 
 version: '3.4'
 
-services:
+services:  
+
+  portainer:
+    container_name: portainer
+    restart: always
+    ports:
+      - "8080:8000"
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+  mssqldb:
+    container_name: mssqldb
+    environment:
+        SA_PASSWORD: "admin@123"
+        ACCEPT_EULA: "Y"
+    restart: always
+    ports:
+        - "1433:1433"
+    volumes: 
+        - ./sql:/sql/
+    command:
+        - /bin/bash
+        - -c 
+        - |
+          # Launch MSSQL and send to background
+          /opt/mssql/bin/sqlservr &
+          # Wait 30 seconds for it to be available
+          # (lame, I know, but there's no nc available to start prodding network ports)
+          sleep 30
+          # Run every script in /scripts
+          # TODO set a flag so that this is only done once on creation, 
+          #      and not every time the container runs
+          /opt/mssql-tools/bin/sqlcmd -U sa -P admin@123 -d master -i /sql/CleanArchitectureDB.sql
+          # So that the container doesn't shut down, sleep this thread
+          sleep infinity
+
   cleanarchitectureappwebapi:
     container_name: cleanarchitectureappwebapi
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:MSSQLConnection=Data Source=172.24.128.1;Initial Catalog=CleanArchitectureDB;User ID=sa;Password=admin@123;MultipleActiveResultSets=True"
+      - "ConnectionStrings:MSSQLConnection=Data Source=mssqldb;Initial Catalog=CleanArchitectureDB;User ID=sa;Password=admin@123;MultipleActiveResultSets=True"
+      - "IsCloudDeployment=false"
+      - "DBProvider=MSSQL"
     ports:
       - 5001:5001
+    depends_on:
+      - mssqldb

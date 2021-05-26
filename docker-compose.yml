@@ -8,4 +8,13 @@ services:
     build:
       context: .
       dockerfile: CleanArchitectureApp.WebApi/Dockerfile
+  
+  portainer:
+    image: portainer/portainer-ce 
     
+  mssqldb:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    
+  
+volumes:
+  portainer_data:

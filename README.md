@@ -1,5 +1,5 @@
 # CleanArchitectureApp
-Clean Architecture Application Design from Scratch using Dotnet Core 3.1 WebApi and Angular 11 FrontEnd
+Clean Architecture Application Design from Scratch using Dotnet Core 5 WebApi and Angular 11 FrontEnd
 
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 

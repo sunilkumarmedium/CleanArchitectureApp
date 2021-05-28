@@ -3,8 +3,8 @@ env:
   variables:
     DOTNET_ROOT: /root/.dotnet
   secrets-manager:
-    AWS_ACCESS_KEY_ID_PARAM: CodeBuild:AWS_ACCESS_KEY_ID
-    AWS_SECRET_ACCESS_KEY_PARAM: CodeBuild:AWS_SECRET_ACCESS_KEY
+    AWS_ACCESS_KEY_ID_PARAM: /CodeBuild/AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY_PARAM: /CodeBuild/AWS_SECRET_ACCESS_KEY
 phases:
   install:
     runtime-versions:

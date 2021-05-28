@@ -1,0 +1,31 @@
+version: 0.2
+env:
+  variables:
+    DOTNET_ROOT: /root/.dotnet
+  secrets-manager:
+    AWS_ACCESS_KEY_ID_PARAM: CodeBuild:AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY_PARAM: CodeBuild:AWS_SECRET_ACCESS_KEY
+phases:
+  install:
+    runtime-versions:
+      dotnet: 3.1
+  pre_build:
+    commands:
+      - echo Restore started on `date`
+      - export PATH="$PATH:/root/.dotnet/tools"
+      - pip install --upgrade awscli
+      - aws configure set profile $Profile
+      - aws configure set region $Region
+      - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID_PARAM
+      - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY_PARAM
+      - cd CleanArchitectureApp      
+      - dotnet clean 
+      - dotnet restore
+  build:
+    commands:
+      - echo Build started on `date`
+      - dotnet new -i Amazon.Lambda.Templates::*
+      - dotnet tool install -g Amazon.Lambda.Tools
+      - dotnet tool update -g Amazon.Lambda.Tools
+      - cd CleanArchitectureApp.WebApi
+      - dotnet lambda deploy-serverless --template serverless.template

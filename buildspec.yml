@@ -18,7 +18,7 @@ phases:
       - aws configure set region $Region
       - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID_PARAM
       - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY_PARAM
-      - cd CleanArchitectureApp      
+      - cd /CleanArchitectureApp/     
       - dotnet clean 
       - dotnet restore
   build:
@@ -27,5 +27,5 @@ phases:
       - dotnet new -i Amazon.Lambda.Templates::*
       - dotnet tool install -g Amazon.Lambda.Tools
       - dotnet tool update -g Amazon.Lambda.Tools
-      - cd CleanArchitectureApp.WebApi
+      - cd /CleanArchitectureApp.WebApi/
       - dotnet lambda deploy-serverless --template serverless.template

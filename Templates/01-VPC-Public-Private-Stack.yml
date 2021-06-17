@@ -1,0 +1,213 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  This AWS CloudFormation template is used to create below resources
+  A VPC, Public Subnet and 2 Private Subnets.
+  Internet Gateway, Public Route Table are created to make a subnet public.  
+  Bastion Host EC2 instance created in public subnet.
+  Security Group for RDP to EC2 Instance   
+Parameters:
+  VPCName:
+    Description: Name of the VPC to be created.
+    Type: String
+    Default: "Dev" 
+    AllowedValues:
+      - Test
+      - Dev
+      - Prod
+  VPCCIDR:
+    Description: VPC CIDR Block
+    Type: String
+    Default: "192.168.0.0/16"     
+  PublicSubnetName:
+    Description: Name of the Public Subnet to be created.
+    Type: String
+    Default: "Public-01"
+  PublicSubnetCIDR:
+    Description: Public Subnet CIDR Block
+    Type: String
+    Default: "192.168.1.0/24" 
+  PrivateSubnetName:
+    Description: Name of the Private Subnets to be created.Comma-delimited list of 2 Subnets
+    Type: CommaDelimitedList
+    Default: "Private-01,Private-02"
+  PrivateSubnetCIDR:
+    Description: Private Subnet CIDR Block. Comma-delimited list of 2 CIDR blocks
+    Type: CommaDelimitedList
+    Default: "192.168.2.0/24,192.168.3.0/24" 
+  KeyPairName:
+    Description: Key Pair file name
+    Type: AWS::EC2::KeyPair::KeyName
+  AMIId:
+    Description: AMI ID
+    Type: String
+    Default: "ami-034a4d85b5ef5e779"
+  RDPLocation:
+    Description: The IP address range that can be used to RDP to the EC2 instances
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+  InstanceType:
+    Description: WebServer EC2 instance type
+    Type: String
+    Default: t2.micro
+    AllowedValues: [t1.micro, t2.nano, t2.micro, t2.small, t2.medium, t2.large, m1.small,
+      m1.medium, m1.large, m1.xlarge, m2.xlarge, m2.2xlarge, m2.4xlarge, m3.medium,
+      m3.large, m3.xlarge, m3.2xlarge, m4.large, m4.xlarge, m4.2xlarge, m4.4xlarge,
+      m4.10xlarge, c1.medium, c1.xlarge, c3.large, c3.xlarge, c3.2xlarge, c3.4xlarge,
+      c3.8xlarge, c4.large, c4.xlarge, c4.2xlarge, c4.4xlarge, c4.8xlarge, g2.2xlarge,
+      g2.8xlarge, r3.large, r3.xlarge, r3.2xlarge, r3.4xlarge, r3.8xlarge, i2.xlarge,
+      i2.2xlarge, i2.4xlarge, i2.8xlarge, d2.xlarge, d2.2xlarge, d2.4xlarge, d2.8xlarge,
+      hi1.4xlarge, hs1.8xlarge, cr1.8xlarge, cc2.8xlarge, cg1.4xlarge]
+    ConstraintDescription: must be a valid EC2 instance type. 
+Resources:
+  mainVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VPCCIDR # Required
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: !Join ["-", [!Ref "AWS::StackName",!Ref VPCName]]
+  privateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      CidrBlock: !Select [0, !Ref PrivateSubnetCIDR]  # Required
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Join ["-", [!Ref "AWS::StackName",!Select [0, !Ref PrivateSubnetName]]] 
+      VpcId: !Ref mainVPC # Required
+  privateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      CidrBlock: !Select [1, !Ref PrivateSubnetCIDR]  # Required
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Join ["-", [!Ref "AWS::StackName",!Select [1, !Ref PrivateSubnetName]]] 
+      VpcId: !Ref mainVPC # Required
+  publicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""       
+      CidrBlock: !Ref PublicSubnetCIDR # Required
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Join ["-", [!Ref "AWS::StackName",!Ref PublicSubnetName]]
+      VpcId: !Ref mainVPC # Required
+  IGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Join ["-", [!Ref "AWS::StackName","gateway"]]
+  IGWVPCAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref IGW
+      VpcId: !Ref mainVPC # Required
+  publicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value : !Join ["-", [!Ref "AWS::StackName","PublicRT"]]
+      VpcId: !Ref mainVPC # Required  
+  publicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: IGWVPCAttachment
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref IGW
+      RouteTableId: !Ref publicRouteTable # Required
+  publicSubnetPublicRTAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref publicRouteTable # Required
+      SubnetId: !Ref publicSubnet # Required  
+  bastionSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable RDP access via port 3389 # Required
+      GroupName: !Join ["-", [!Ref "AWS::StackName","bastion-sg"]]
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '3389'
+          ToPort: '3389'
+          CidrIp: !Ref 'RDPLocation'
+      Tags:
+        - Key: Name
+          Value: !Join ["-", [!Ref "AWS::StackName","bastion-sg"]]
+      VpcId: !Ref mainVPC
+  BastionHost:
+    Type: AWS::EC2::Instance
+    Properties:      
+      ImageId: !Ref AMIId
+      InstanceType: !Ref InstanceType      
+      KeyName: !Ref KeyPairName        
+      SecurityGroupIds: 
+        - !Ref bastionSecurityGroup    
+      SubnetId: !Ref publicSubnet
+      Tags:
+        - Key: Name
+          Value: !Join ["-", [!Ref "AWS::StackName","Bastion"]]
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "Network Configuration"
+        Parameters:
+          - VPCName
+          - VPCCIDR
+          - PublicSubnetName
+          - PublicSubnetCIDR
+          - PrivateSubnetName
+          - PrivateSubnetCIDR
+      - Label:
+          default: "Amazon EC2 Configuration"
+        Parameters:
+          - InstanceType
+          - AMIId
+          - KeyPairName
+          - RDPLocation
+    ParameterLabels:
+      VPCName:
+        default: "Name of VPC"
+      VPCCIDR:
+        default: "Enter CIDR Block for VPC"
+      PublicSubnetName:
+        default: "Enter Public Subnet Name"
+      PublicSubnetCIDR:
+        default: "Enter Public Subnet CIDR Block"
+      PrivateSubnetName:
+        default: "Enter Private Subnet Name"
+      PrivateSubnetCIDR:
+        default: "Enter Private Subnet CIDR Block"
+      InstanceType:
+        default: "Select EC2 Instance Type"
+      AMIId:
+        default: "Select EC2 Instance Type"
+      KeyPairName:
+        default: "Select KeyPair"
+      RDPLocation:
+        default: "Enter access to EC2 Instance ex. 0.0.0.0/0"
+Outputs:
+  VPCID:
+    Description: VPC ID
+    Value: !Ref mainVPC

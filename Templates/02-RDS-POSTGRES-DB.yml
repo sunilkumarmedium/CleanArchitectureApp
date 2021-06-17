@@ -1,0 +1,185 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  This CloudFormation template is used to create Postgres RDS Instance and place the instance in private subnet
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: VpcId of your existing Virtual Private Cloud (VPC)
+    ConstraintDescription: must be the VPC Id of an existing Virtual Private Cloud.
+  SubnetId:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: SubnetId of an existing subnet (for the primary network) in your
+      Virtual Private Cloud (VPC)
+    ConstraintDescription: must be an existing subnet in the selected Virtual Private
+      Cloud.
+  DBInstanceName:
+    Description: Name of the RDS DB Instance to be created.
+    Type: String
+  DatabaseName:
+    Default: CleanArchitectureDB
+    Description: Database name
+    Type: String
+    MinLength: '1'
+    MaxLength: '64'
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: Begin with a letter and use only alphanumeric characters.
+  DBBackupRetentionPeriod:
+    Description: 'The number of days to keep snapshots of the database.'
+    Type: Number
+    MinValue: 0
+    MaxValue: 35
+    Default: 7
+  DBMasterUsername:
+    Description: The master user name for the DB instance
+    Default: postgres
+    Type: String
+    MinLength: '1'
+    MaxLength: '16'
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: Begin with a letter and use only alphanumeric characters.
+  DBMasterUserPassword:
+    NoEcho: true
+    Description: The master password for the DB instance
+    Type: String
+  DBMultiAZ:
+    Description: 'Specifies if the database instance is deployed to multiple Availability Zones for HA.'
+    Type: String
+    Default: false
+    AllowedValues: [true, false]
+  EngineVersion:
+    Description: 'PostgreSQL version.'
+    Type: String
+    Default: '12.5'
+    AllowedValues: ["9.6.1","9.6.2","9.6.3","9.6.5","9.6.6","9.6.8","9.6.9","9.6.10","9.6.11","9.6.12","9.6.14","9.6.15","9.6.16","9.6.17","9.6.18","9.6.19","9.6.20","9.6.21","10.1","10.3","10.4","10.5","10.6","10.7","10.9","10.10","10.11","10.12","10.13","10.14","10.15","10.16","11.1","11.2","11.4","11.5","11.6","11.7","11.8","11.9","11.10","11.11","12.2","12.3","12.4","12.5","12.6","13.1","13.2"] 
+  DBAllocatedStorage:
+    Description: 'The allocated storage size, specified in GB (ignored when DBSnapshotIdentifier is set, value used from snapshot).'
+    Type: Number
+    Default: 20
+    MinValue: 5
+    MaxValue: 16384
+  DBInstanceType:
+    Description: 'The instance type of database server.'
+    Type: String
+    Default: 'db.t2.micro'
+Resources:
+  PostgresRDS:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AllocatedStorage: !Ref DBAllocatedStorage
+      AllowMajorVersionUpgrade: false      
+      AutoMinorVersionUpgrade: true
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      BackupRetentionPeriod: !Ref DBBackupRetentionPeriod      
+      CopyTagsToSnapshot: false      
+      DBInstanceClass: !Ref DBInstanceType # Required
+      DBInstanceIdentifier: !Ref DBInstanceName
+      DBName: !Ref DatabaseName      
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      DeleteAutomatedBackups: false
+      DeletionProtection: false      
+      EnableIAMDatabaseAuthentication: false
+      EnablePerformanceInsights: false
+      Engine: "postgres"
+      EngineVersion: !Ref EngineVersion      
+      MasterUserPassword: !Ref DBMasterUserPassword
+      MasterUsername: !Ref DBMasterUsername      
+      MultiAZ: !Ref DBMultiAZ
+      Port: "5432"      
+      PubliclyAccessible: false
+      SourceRegion: !Ref "AWS::Region"
+      StorageEncrypted: false
+      StorageType: gp2
+      VPCSecurityGroups: !Ref DBSecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Join ["-", [!Ref "AWS::StackName",!Ref DBInstanceName]]
+      UseDefaultProcessorFeatures: false      
+  DBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Join ["-", [!Ref "AWS::StackName","dbsecurity-group"]] # Required
+      GroupName: !Join ["-", [!Ref "AWS::StackName","dbsecurity-group"]]      
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: 192.168.1.0/24
+      Tags:
+        - Key: Name
+          Value: !Join ["-", [!Ref "AWS::StackName","dbsecurity-group"]]
+      VpcId: !Ref VpcId
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: !Join ["-", [!Ref "AWS::StackName","dbsubnet-group"]] # Required
+      DBSubnetGroupName: !Join ["-", [!Ref "AWS::StackName","dbsubnet-group"]]
+      SubnetIds: # Required
+        !Ref SubnetId
+      Tags:
+        - Key: Name
+          Value: !Join ["-", [!Ref "AWS::StackName","dbsubnet-group"]]
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "Network Configuration"
+        Parameters:
+          - VpcId
+          - SubnetId
+      - Label:
+          default: "Amazon RDS Configuration"
+        Parameters:
+          - DBInstanceName
+          - DBInstanceType
+          - EngineVersion
+          - DatabaseName
+          - DBMasterUsername
+          - DBMasterUserPassword
+          - DBAllocatedStorage
+          - DBMultiAZ
+          - DBBackupRetentionPeriod
+    ParameterLabels:
+      VpcId:
+        default: "Select VPC for DB Instance"
+      SubnetId:
+        default: "Select Private Subnets"
+      DBInstanceName:
+        default: "Enter DB Instance Name"
+      DBInstanceType:
+        default: "Enter DB Instance Type"
+      EngineVersion:
+        default: "Select Engine Version"
+      DatabaseName:
+        default: "Enter Database Name to be created"
+      DBMasterUsername:
+        default: "Enter Master User Name"
+      DBMasterUserPassword:
+        default: "Enter Master User Password"
+      DBAllocatedStorage:
+        default: "Allocated Storage"
+      DBMultiAZ:
+        default: "Enable Multi-AZ deployment"
+      DBBackupRetentionPeriod:
+        default: "Database Backup Retention Period"
+Outputs:
+  StackName:
+    Description: 'Stack name.'
+    Value: !Sub '${AWS::StackName}'
+  InstanceName:
+    Description: 'The name of the database instance.'
+    Value: !Ref PostgresRDS
+    Export:
+      Name: !Sub '${AWS::StackName}-InstanceName'
+  DNSName:
+    Description: 'The connection endpoint for the database.'
+    Value: !GetAtt 'PostgresRDS.Endpoint.Address'
+    Export:
+      Name: !Sub '${AWS::StackName}-DNSName'
+  SecurityGroupId:
+    Description: 'The security group used to manage access to RDS Postgres.'
+    Value: !Ref DBSecurityGroup
+    Export:
+      Name: !Sub '${AWS::StackName}-SecurityGroupId'

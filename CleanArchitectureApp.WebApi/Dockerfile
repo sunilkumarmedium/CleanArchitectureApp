@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:3.1 AS base
 WORKDIR /app
 EXPOSE 5001
 
@@ -9,7 +9,7 @@ ENV ASPNETCORE_URLS=http://+:5001
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
 USER appuser
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 WORKDIR /src
 COPY ["CleanArchitectureApp.WebApi/CleanArchitectureApp.WebApi.csproj", "CleanArchitectureApp.WebApi/"]
 RUN dotnet restore "CleanArchitectureApp.WebApi/CleanArchitectureApp.WebApi.csproj"

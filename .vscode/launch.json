@@ -9,7 +9,7 @@
         "type": "coreclr",
         "request": "launch",
         "preLaunchTask": "build",
-        "program": "${workspaceFolder}/CleanArchitectureApp.WebApi/bin/Debug/net5.0/CleanArchitectureApp.WebApi.dll",
+        "program": "${workspaceFolder}/CleanArchitectureApp.WebApi/bin/Debug/netcoreapp3.1/CleanArchitectureApp.WebApi.dll",
         "args": [],
         "cwd": "${workspaceFolder}",
         "stopAtEntry": false,

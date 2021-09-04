@@ -14,7 +14,20 @@ services:
     
   mssqldb:
     image: mcr.microsoft.com/mssql/server:2017-latest
-    
+  postgresdb:
+    image: postgres
+  pgadmin:
+    image: dpage/pgadmin4
+  rabbitmq:
+    image: rabbitmq:3.9.4-management-alpine
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.14.0    
   
 volumes:
   portainer_data:
+  postgres_data:
+  pgadmin_data:
+  elasticsearch-data:
